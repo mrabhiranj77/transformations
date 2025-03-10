@@ -1,38 +1,55 @@
-import numpy as np 
-A = np.array([2, 3, 1])   
-B = np.array([5, 7, 1]) 
-C = np.array([8, 3, 1]) 
-scaling_matrix = np.array([[2, 0, 0], 
-[0, 3, 0], 
-[0, 0, 1]]) 
-theta = np.radians(90) 
-rotation_matrix = np.array([[np.cos(theta), 
-np.sin(theta), 0], 
-[np.sin(theta),  np.cos(theta), 0], 
-[0, 0, 1]]) 
-translation_matrix = np.array([[1, 0, 4], 
-[0, 1, -2], 
-[0, 0, 1]]) 
-A_scaled = scaling_matrix @ A 
-B_scaled = scaling_matrix @ B 
-C_scaled = scaling_matrix @ C 
-print("Scaling Results:") 
-print(f"Scaled A: {tuple(map(int, A_scaled[:2]))}") 
-print(f"Scaled B: {tuple(map(int, B_scaled[:2]))}") 
-print(f"Scaled C: {tuple(map(int, C_scaled[:2]))}") 
-print() 
-A_rotated = rotation_matrix @ A_scaled 
-B_rotated = rotation_matrix @ B_scaled 
-C_rotated = rotation_matrix @ C_scaled 
-print("Rotation Results:") 
-print(f"Rotated A: {tuple(map(int, A_rotated[:2]))}") 
-print(f"Rotated B: {tuple(map(int, B_rotated[:2]))}") 
-print(f"Rotated C: {tuple(map(int, C_rotated[:2]))}") 
-print() 
-A_transformed = translation_matrix @ A_rotated 
-B_transformed = translation_matrix @ B_rotated 
-C_transformed = translation_matrix @ C_rotated 
-print("Translation Results:") 
-print(f"Translated A: {tuple(map(int, A_transformed[:2]))}") 
-print(f"Translated B: {tuple(map(int, B_transformed[:2]))}") 
-print(f"Translated C: {tuple(map(int, C_transformed[:2]))}")
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define new points A, B, C in homogeneous coordinates
+A = np.array([1, 4, 1])
+B = np.array([6, 2, 1])
+C = np.array([7, 5, 1])
+
+# Define transformation matrices
+scaling_matrix = np.array([[2, 0, 0], [0, 3, 0], [0, 0, 1]])
+theta = np.radians(90)
+rotation_matrix = np.array([[np.cos(theta), -np.sin(theta), 0], 
+                            [np.sin(theta), np.cos(theta), 0], 
+                            [0, 0, 1]])
+translation_matrix = np.array([[1, 0, 4], [0, 1, -2], [0, 0, 1]])
+
+# Apply transformations
+A_scaled = scaling_matrix @ A
+B_scaled = scaling_matrix @ B
+C_scaled = scaling_matrix @ C
+
+A_rotated = rotation_matrix @ A_scaled
+B_rotated = rotation_matrix @ B_scaled
+C_rotated = rotation_matrix @ C_scaled
+
+A_transformed = translation_matrix @ A_rotated
+B_transformed = translation_matrix @ B_rotated
+C_transformed = translation_matrix @ C_rotated
+
+# Extract coordinates for plotting
+original_points = np.array([A[:2], B[:2], C[:2]])
+scaled_points = np.array([A_scaled[:2], B_scaled[:2], C_scaled[:2]])
+rotated_points = np.array([A_rotated[:2], B_rotated[:2], C_rotated[:2]])
+transformed_points = np.array([A_transformed[:2], B_transformed[:2], C_transformed[:2]])
+
+# Plot transformations
+plt.figure(figsize=(8, 8))
+
+plt.scatter(original_points[:, 0], original_points[:, 1], color='blue', label="Original")
+plt.scatter(scaled_points[:, 0], scaled_points[:, 1], color='green', label="Scaled")
+plt.scatter(rotated_points[:, 0], rotated_points[:, 1], color='orange', label="Rotated")
+plt.scatter(transformed_points[:, 0], transformed_points[:, 1], color='red', label="Translated")
+
+# Connect corresponding points
+for i in range(3):
+    plt.plot([original_points[i, 0], scaled_points[i, 0]], [original_points[i, 1], scaled_points[i, 1]], 'g--')
+    plt.plot([scaled_points[i, 0], rotated_points[i, 0]], [scaled_points[i, 1], rotated_points[i, 1]], 'y--')
+    plt.plot([rotated_points[i, 0], transformed_points[i, 0]], [rotated_points[i, 1], transformed_points[i, 1]], 'r--')
+
+plt.axhline(0, color='black', linewidth=0.5)
+plt.axvline(0, color='black', linewidth=0.5)
+plt.grid(True, linestyle="--", linewidth=0.5)
+plt.legend()
+plt.title("Geometric Transformations (Scaling, Rotation, Translation)")
+plt.show()
