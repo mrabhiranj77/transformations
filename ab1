@@ -1,0 +1,38 @@
+import numpy as np 
+A = np.array([2, 3, 1])   
+B = np.array([5, 7, 1]) 
+C = np.array([8, 3, 1]) 
+scaling_matrix = np.array([[2, 0, 0], 
+[0, 3, 0], 
+[0, 0, 1]]) 
+theta = np.radians(90) 
+rotation_matrix = np.array([[np.cos(theta), 
+np.sin(theta), 0], 
+[np.sin(theta),  np.cos(theta), 0], 
+[0, 0, 1]]) 
+translation_matrix = np.array([[1, 0, 4], 
+[0, 1, -2], 
+[0, 0, 1]]) 
+A_scaled = scaling_matrix @ A 
+B_scaled = scaling_matrix @ B 
+C_scaled = scaling_matrix @ C 
+print("Scaling Results:") 
+print(f"Scaled A: {tuple(map(int, A_scaled[:2]))}") 
+print(f"Scaled B: {tuple(map(int, B_scaled[:2]))}") 
+print(f"Scaled C: {tuple(map(int, C_scaled[:2]))}") 
+print() 
+A_rotated = rotation_matrix @ A_scaled 
+B_rotated = rotation_matrix @ B_scaled 
+C_rotated = rotation_matrix @ C_scaled 
+print("Rotation Results:") 
+print(f"Rotated A: {tuple(map(int, A_rotated[:2]))}") 
+print(f"Rotated B: {tuple(map(int, B_rotated[:2]))}") 
+print(f"Rotated C: {tuple(map(int, C_rotated[:2]))}") 
+print() 
+A_transformed = translation_matrix @ A_rotated 
+B_transformed = translation_matrix @ B_rotated 
+C_transformed = translation_matrix @ C_rotated 
+print("Translation Results:") 
+print(f"Translated A: {tuple(map(int, A_transformed[:2]))}") 
+print(f"Translated B: {tuple(map(int, B_transformed[:2]))}") 
+print(f"Translated C: {tuple(map(int, C_transformed[:2]))}")
